@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "201585203299",
+    "firebase_url": "https://noter-3bdf8-default-rtdb.firebaseio.com",
+    "project_id": "noter-3bdf8",
+    "storage_bucket": "noter-3bdf8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201585203299:android:320219fa4cd9a612508056",
+        "android_client_info": {
+          "package_name": "com.devT.note_ring"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAIn-GpbZCLq1UO_CWh9jZ-FC-ZxwrzwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
