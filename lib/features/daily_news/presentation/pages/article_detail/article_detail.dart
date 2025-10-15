@@ -34,8 +34,8 @@ class ArticleDetail extends HookWidget {
         onPressed: () => _onBackButtonTapped(context),
       ),
       title: Text(
-        articleEntity?.title ?? 'Article Details',
-        style: const TextStyle(color: Colors.black),
+        articleEntity?.author ?? 'Article Details',
+        style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22),
       ),
       backgroundColor: Colors.white,
       elevation: 1,

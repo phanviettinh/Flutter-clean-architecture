@@ -59,8 +59,7 @@ class DailyNews extends StatelessWidget {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    // Bạn có thể dispatch lại event GetArticles tại đây
-                    // context.read<RemoteArticleBloc>().add(GetArticles());
+                    context.read<RemoteArticleBloc>().add(GetArticles());
                   },
                   child: const Text("Retry"),
                 ),
@@ -78,7 +77,7 @@ class DailyNews extends StatelessWidget {
 
           return RefreshIndicator(
             onRefresh: () async {
-              // context.read<RemoteArticleBloc>().add(GetArticles());
+              context.read<RemoteArticleBloc>().add(GetArticles());
             },
             child: ListView.builder(
               itemCount: articles.length,

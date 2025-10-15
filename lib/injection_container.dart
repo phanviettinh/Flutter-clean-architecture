@@ -12,12 +12,11 @@ import 'features/daily_news/domain/usecases/get__saved_article.dart';
 import 'features/daily_news/domain/usecases/remove_article.dart';
 import 'features/daily_news/domain/usecases/save_article.dart';
 
-final sl = GetIt.instance; //service localtor
+final sl = GetIt.instance; //service locator
 
 Future<void> initializeDependencies() async{
 
   final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-
   sl.registerSingleton<AppDatabase>(database);
   //dio
   sl.registerSingleton<Dio>(Dio());
@@ -37,6 +36,5 @@ Future<void> initializeDependencies() async{
 
   //blocs
   sl.registerFactory<RemoteArticleBloc>(() => RemoteArticleBloc(sl()));
-
   sl.registerFactory<LocalArticleBloc>(() => LocalArticleBloc(sl(),sl(),sl()));
 }

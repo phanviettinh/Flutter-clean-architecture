@@ -6,7 +6,6 @@ ThemeData theme(){
   return ThemeData(
     scaffoldBackgroundColor: Colors.white,
     fontFamily: 'SFProDisplay',
-
     appBarTheme: appBarTheme()
   );
 }
