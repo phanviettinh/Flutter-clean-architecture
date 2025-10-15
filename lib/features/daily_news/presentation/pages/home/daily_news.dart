@@ -1,18 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_ring/features/daily_news/domain/entities/article.dart';
 import 'package:note_ring/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:note_ring/features/daily_news/presentation/bloc/article/remote/remote_article_state.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../../config/routers/router.dart';
+import '../../../../../injection_container.dart';
+import '../../bloc/article/remote/remote_article_event.dart';
 
 class DailyNews extends StatelessWidget {
   const DailyNews({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppbar(),
-      body: _buildBody(),
+    return BlocProvider<RemoteArticleBloc>(
+      create: (BuildContext context) => sl<RemoteArticleBloc>()..add(const GetArticles()),
+      child: Scaffold(
+        appBar: _buildAppbar(),
+        body: _buildBody(),
+      ),
     );
   }
 
@@ -24,6 +31,9 @@ class DailyNews extends StatelessWidget {
       ),
       backgroundColor: Colors.white,
       centerTitle: true,
+      actions: [
+        IconButton(onPressed: () => AppRouter.goToSavedArticles(AppRouter.navigatorKey.currentContext!),icon: Icon(Icons.save))
+      ],
       elevation: 1,
     );
   }
@@ -83,11 +93,7 @@ class DailyNews extends StatelessWidget {
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
-                    onTap: () {
-                      if (article.url != null) {
-                        launchUrl(Uri.parse(article.url!));
-                      }
-                    },
+                    onTap: () => _onArticleOnpress(context, article),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -168,5 +174,9 @@ class DailyNews extends StatelessWidget {
         return const SizedBox.shrink();
       },
     );
+  }
+
+  void _onArticleOnpress(BuildContext context, ArticleEntity article) {
+    AppRouter.goToArticleDetail(context, article);
   }
 }

@@ -16,6 +16,11 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
+ #firebase
+  firebase_core: ^4.2.0
+  firebase_messaging: ^16.0.3
+  firebase_crashlytics: ^5.0.3
+
   # State management
   flutter_bloc: ^9.1.1
 
@@ -41,6 +46,7 @@ dependencies:
   cached_network_image: ^3.4.1
   dio: ^5.9.0
   url_launcher: ^6.3.2
+
 
 
 dev_dependencies:
