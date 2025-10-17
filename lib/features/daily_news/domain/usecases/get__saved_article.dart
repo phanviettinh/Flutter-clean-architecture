@@ -13,5 +13,4 @@ class GetSavedArticleUseCase implements UseCase<List<ArticleEntity>,void>{
     // TODO: implement call
     return _articleRepository.getSavedArticles();
   }
-
 }

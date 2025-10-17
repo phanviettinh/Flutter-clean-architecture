@@ -17,25 +17,28 @@ class SavedArticle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => sl<LocalArticleBloc>()..add(const GetSavedArticles(null)),
+      create:
+          (BuildContext contextBloc) =>
+              sl<LocalArticleBloc>()..add(const GetSavedArticles(null)),
 
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
             'Saved Articles',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          backgroundColor: Colors.white,
           elevation: 1,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.refresh, color: Colors.black),
-              onPressed: () {
-                context.read<LocalArticleBloc>().add(const GetSavedArticles(null));
-              },
+            BlocBuilder<LocalArticleBloc,LocalArticlesState>(
+              builder:
+                  (BuildContext context, state) => IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () {
+                      context.read<LocalArticleBloc>().add(
+                        const GetSavedArticles(null),
+                      );
+                    },
+                  ),
             ),
           ],
         ),
@@ -66,7 +69,9 @@ class SavedArticle extends StatelessWidget {
 
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<LocalArticleBloc>().add(const GetSavedArticles(null));
+                  context.read<LocalArticleBloc>().add(
+                    const GetSavedArticles(null),
+                  );
                 },
                 child: ListView.builder(
                   padding: const EdgeInsets.all(12),
@@ -88,31 +93,31 @@ class SavedArticle extends StatelessWidget {
                             // Image
                             article.urlToImage != null
                                 ? Image.network(
-                              article.urlToImage!,
-                              height: 200,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) =>
-                                  Container(
-                                    height: 200,
-                                    color: Colors.grey[200],
-                                    child: const Icon(
-                                      Icons.broken_image,
-                                      size: 80,
-                                      color: Colors.grey,
+                                  article.urlToImage!,
+                                  height: 200,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (_, __, ___) => Container(
+                                        height: 200,
+                                        color: Colors.grey[200],
+                                        child: const Icon(
+                                          Icons.broken_image,
+                                          size: 80,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                )
+                                : Container(
+                                  height: 200,
+                                  color: Colors.grey[200],
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.image_not_supported,
+                                      size: 50,
                                     ),
                                   ),
-                            )
-                                : Container(
-                              height: 200,
-                              color: Colors.grey[200],
-                              child: const Center(
-                                child: Icon(
-                                  Icons.image_not_supported,
-                                  size: 50,
                                 ),
-                              ),
-                            ),
                             // Content
                             Padding(
                               padding: const EdgeInsets.all(12.0),
@@ -133,19 +138,20 @@ class SavedArticle extends StatelessWidget {
                                     article.description ?? '',
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 14,
-                                    ),
+                                    style: const TextStyle(fontSize: 14),
                                   ),
                                   const SizedBox(height: 8),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         children: [
-                                          const Icon(Icons.bookmark,
-                                              size: 16, color: Colors.amber),
+                                          const Icon(
+                                            Icons.bookmark,
+                                            size: 16,
+                                            color: Colors.amber,
+                                          ),
                                           const SizedBox(width: 4),
                                           Text(
                                             'Saved',
@@ -158,7 +164,8 @@ class SavedArticle extends StatelessWidget {
                                         ],
                                       ),
                                       Text(
-                                        article.publishedAt?.substring(0, 10) ?? '',
+                                        article.publishedAt?.substring(0, 10) ??
+                                            '',
                                         style: const TextStyle(
                                           fontSize: 12,
                                           color: Colors.grey,
@@ -171,26 +178,41 @@ class SavedArticle extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: ElevatedButton.icon(
-                                          onPressed: () => _onRemoveArticle(context, article),
+                                          onPressed:
+                                              () => _onRemoveArticle(
+                                                context,
+                                                article,
+                                              ),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.red,
                                             foregroundColor: Colors.white,
-                                            padding: const EdgeInsets.symmetric(vertical: 8),
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 8,
+                                            ),
                                           ),
-                                          icon: const Icon(Icons.delete, size: 16),
+                                          icon: const Icon(
+                                            Icons.delete,
+                                            size: 16,
+                                          ),
                                           label: const Text('Remove'),
                                         ),
                                       ),
                                       const SizedBox(width: 8),
                                       Expanded(
                                         child: ElevatedButton.icon(
-                                          onPressed: () => _launchURL(article.url),
+                                          onPressed:
+                                              () => _launchURL(article.url),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.blue,
                                             foregroundColor: Colors.white,
-                                            padding: const EdgeInsets.symmetric(vertical: 8),
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 8,
+                                            ),
                                           ),
-                                          icon: const Icon(Icons.open_in_new, size: 16),
+                                          icon: const Icon(
+                                            Icons.open_in_new,
+                                            size: 16,
+                                          ),
                                           label: const Text('Read'),
                                         ),
                                       ),
@@ -217,35 +239,40 @@ class SavedArticle extends StatelessWidget {
 
   void _onArticleTap(BuildContext context, ArticleEntity article) {
     AppRouter.goToArticleDetail(context, article);
-
   }
 
   void _onRemoveArticle(BuildContext context, ArticleEntity article) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Remove Article'),
-        content: const Text('Are you sure you want to remove this saved article?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+      builder:
+          (_) => AlertDialog(
+            title: const Text('Remove Article'),
+            content: const Text(
+              'Are you sure you want to remove this saved article?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<LocalArticleBloc>().add(RemoveArticles(article));
+                  Navigator.pop(context);
+                  showTopSnackbarNotification(
+                    context,
+                    'Article removed from saved',
+                    type:
+                        NotificationType.info, // Dùng NotificationType.success
+                  );
+                },
+                child: const Text(
+                  'Remove',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              context.read<LocalArticleBloc>().add(RemoveArticles(article));
-              Navigator.pop(context);
-              showTopSnackbarNotification(
-                context,
-                'Article removed from saved',
-                type: NotificationType.info, // Dùng NotificationType.success
-              );
-
-            },
-            child: const Text('Remove', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
     );
   }
 
