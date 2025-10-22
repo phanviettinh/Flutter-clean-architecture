@@ -8,6 +8,7 @@ class RemoteArticleBloc extends Bloc<RemoteArticleEvent,RemoteArticleState>{
   final GetArticleUseCase _getArticleUseCase;
   RemoteArticleBloc(this._getArticleUseCase) : super(RemoteArticleLoading()){
     on<GetArticles>(onGetArticle);
+
   }
 
 

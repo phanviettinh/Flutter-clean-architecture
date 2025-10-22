@@ -38,18 +38,17 @@ class DailyNews extends StatelessWidget {
       ),
       actions: [
         // 🔘 Dark Mode toggle
-        BlocBuilder<ThemeBloc, ThemeState>(
-          builder: (context, state) {
+        BlocSelector<ThemeBloc, ThemeState,bool>(
+          builder: (context, isDarkMode) {
             return IconButton(
               icon: Icon(
-                state.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                isDarkMode ? Icons.dark_mode : Icons.light_mode,
               ),
               onPressed: () {
-
                 context.read<ThemeBloc>().add(ToggleThemeEvent());
               },
             );
-          },
+          }, selector: (state) => state.isDarkMode,
         ),
 
         // 💾 Save Articles
@@ -123,7 +122,7 @@ class DailyNews extends StatelessWidget {
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
-                    onTap: () => _onArticleOnpress(context, article),
+                    onTap: () => _onArticleOnPress(context, article),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -205,7 +204,7 @@ class DailyNews extends StatelessWidget {
     );
   }
 
-  void _onArticleOnpress(BuildContext context, ArticleEntity article) {
+  void _onArticleOnPress(BuildContext context, ArticleEntity article) {
     AppRouter.goToArticleDetail(context, article);
   }
 }

@@ -85,8 +85,7 @@ class _TopSnackbarNotificationState extends State<TopSnackbarNotification>
         iconData = Icons.error_outline;
         break;
       case NotificationType.info:
-      default:
-        backgroundColor = Colors.blue.shade700;
+      backgroundColor = Colors.blue.shade700;
         iconData = Icons.info_outline;
         break;
     }

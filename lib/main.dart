@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_ring/config/theme/app_theme.dart';
@@ -9,6 +10,9 @@ import 'injection_container.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencies();
+  await Firebase.initializeApp();
+
+  // FirebaseCrashlytics.instance.crash();
   runApp(const MyApp());
 }
 
