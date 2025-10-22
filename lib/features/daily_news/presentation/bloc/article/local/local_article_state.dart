@@ -3,10 +3,7 @@ import 'package:note_ring/features/daily_news/domain/entities/article.dart';
 
 abstract class LocalArticlesState extends Equatable{
   final List<ArticleEntity>? articles;
-
-
   const LocalArticlesState({this.articles});
-
   @override
   // TODO: implement props
   List<Object?> get props => [articles];

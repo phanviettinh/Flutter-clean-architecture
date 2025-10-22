@@ -22,7 +22,7 @@ class ArticleDetail extends HookWidget {
       child: Scaffold(
         appBar: _buildAppbar(context),
         body: _buildBody(),
-        floatingActionButton: _buildFloatingActionButton(context), // FAB chính là nút save
+        floatingActionButton: _buildFloatingActionButton(context),
       ),
     );
   }
@@ -30,14 +30,14 @@ class ArticleDetail extends HookWidget {
   PreferredSizeWidget _buildAppbar(BuildContext context) {
     return AppBar(
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.black),
+        icon: const Icon(Icons.arrow_back,),
         onPressed: () => _onBackButtonTapped(context),
       ),
       title: Text(
         articleEntity?.author ?? 'Article Details',
-        style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22),
+        style: const TextStyle(fontWeight: FontWeight.bold,
+        ),
       ),
-      backgroundColor: Colors.white,
       elevation: 1,
     );
   }

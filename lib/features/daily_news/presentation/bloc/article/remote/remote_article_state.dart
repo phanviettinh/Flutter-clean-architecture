@@ -12,8 +12,8 @@ import 'package:note_ring/features/daily_news/domain/entities/article.dart';
   @override
   // TODO: implement props
   List<Object?> get props => [articles,error];
-
 }
+
 class RemoteArticleLoading extends RemoteArticleState{
    const RemoteArticleLoading();
 }

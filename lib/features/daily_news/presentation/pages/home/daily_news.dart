@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_ring/features/daily_news/domain/entities/article.dart';
 import 'package:note_ring/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:note_ring/features/daily_news/presentation/bloc/article/remote/remote_article_state.dart';
-
 import '../../../../../config/routers/router.dart';
 import '../../../../../injection_container.dart';
 import '../../bloc/article/remote/remote_article_event.dart';
+import '../../../../../config/theme/bloc/theme_bloc.dart';
+import '../../../../../config/theme/bloc/theme_event.dart';
+import '../../../../../config/theme/bloc/theme_state.dart';
 
 class DailyNews extends StatelessWidget {
   const DailyNews({super.key});
@@ -15,30 +17,53 @@ class DailyNews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<RemoteArticleBloc>(
-      create: (BuildContext context) => sl<RemoteArticleBloc>()..add(const GetArticles()),
+      create: (BuildContext context) =>
+      sl<RemoteArticleBloc>()..add(const GetArticles()),
       child: Scaffold(
-        appBar: _buildAppbar(),
-        body: _buildBody(),
+        appBar: _buildAppbar(context),
+        body: _buildBody(context ),
       ),
     );
   }
 
-  AppBar _buildAppbar() {
+  AppBar _buildAppbar(BuildContext context) {
     return AppBar(
-      title: const Text(
-        'Daily News',
-        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      backgroundColor: Colors.white,
       centerTitle: true,
-      actions: [
-        IconButton(onPressed: () => AppRouter.goToSavedArticles(AppRouter.navigatorKey.currentContext!),icon: Icon(Icons.save))
-      ],
       elevation: 1,
+      title: Text(
+        'Daily News',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      actions: [
+        // 🔘 Dark Mode toggle
+        BlocSelector<ThemeBloc, ThemeState,bool>(
+          builder: (context, isDarkMode) {
+            return IconButton(
+              icon: Icon(
+                isDarkMode ? Icons.dark_mode : Icons.light_mode,
+              ),
+              onPressed: () {
+                context.read<ThemeBloc>().add(ToggleThemeEvent());
+              },
+            );
+          }, selector: (state) => state.isDarkMode,
+        ),
+
+        // 💾 Save Articles
+        IconButton(
+          onPressed: () => AppRouter.goToSavedArticles(
+              AppRouter.navigatorKey.currentContext!),
+          icon: Icon(
+            Icons.save,
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     return BlocBuilder<RemoteArticleBloc, RemoteArticleState>(
       builder: (context, state) {
         if (state is RemoteArticleLoading) {
@@ -50,7 +75,8 @@ class DailyNews extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                Icon(Icons.error_outline,
+                    size: 48, color:  Colors.red),
                 const SizedBox(height: 10),
                 Text(
                   state.error?.message ?? 'Something went wrong',
@@ -59,7 +85,7 @@ class DailyNews extends StatelessWidget {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    context.read<RemoteArticleBloc>().add(GetArticles());
+                    context.read<RemoteArticleBloc>().add(const GetArticles());
                   },
                   child: const Text("Retry"),
                 ),
@@ -72,12 +98,16 @@ class DailyNews extends StatelessWidget {
           final articles = state.articles;
 
           if (articles!.isEmpty) {
-            return const Center(child: Text('No articles found'));
+            return Center(
+              child: Text(
+                'No articles found',
+              ),
+            );
           }
 
           return RefreshIndicator(
             onRefresh: () async {
-              context.read<RemoteArticleBloc>().add(GetArticles());
+              context.read<RemoteArticleBloc>().add(const GetArticles());
             },
             child: ListView.builder(
               itemCount: articles.length,
@@ -92,28 +122,31 @@ class DailyNews extends StatelessWidget {
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
-                    onTap: () => _onArticleOnpress(context, article),
+                    onTap: () => _onArticleOnPress(context, article),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Ảnh
+                        // 🖼 Hình ảnh
                         article.urlToImage != null
                             ? Image.network(
                           article.urlToImage!,
                           height: 200,
                           width: double.infinity,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) =>
-                          const Icon(Icons.broken_image, size: 80),
+                          errorBuilder: (_, __, ___) => const Icon(
+                            Icons.broken_image,
+                            size: 80,
+                          ),
                         )
                             : Container(
                           height: 200,
-                          color: Colors.grey[200],
+                          color: Colors.grey[700],
                           child: const Center(
-                              child: Icon(Icons.image_not_supported,
-                                  size: 50)),
+                            child: Icon(Icons.image_not_supported, size: 50),
+                          ),
                         ),
-                        // Nội dung
+
+                        // 📝 Nội dung
                         Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Column(
@@ -121,7 +154,7 @@ class DailyNews extends StatelessWidget {
                             children: [
                               Text(
                                 article.title ?? 'No title',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
@@ -131,8 +164,7 @@ class DailyNews extends StatelessWidget {
                                 article.description ?? '',
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.black54,
+                                style: TextStyle(
                                   fontSize: 14,
                                 ),
                               ),
@@ -143,17 +175,14 @@ class DailyNews extends StatelessWidget {
                                 children: [
                                   Text(
                                     article.author ?? 'Unknown author',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 12,
-                                      color: Colors.grey,
                                     ),
                                   ),
                                   Text(
-                                    article.publishedAt?.substring(0, 10) ??
-                                        '',
-                                    style: const TextStyle(
+                                    article.publishedAt?.substring(0, 10) ?? '',
+                                    style: TextStyle(
                                       fontSize: 12,
-                                      color: Colors.grey,
                                     ),
                                   ),
                                 ],
@@ -175,7 +204,7 @@ class DailyNews extends StatelessWidget {
     );
   }
 
-  void _onArticleOnpress(BuildContext context, ArticleEntity article) {
+  void _onArticleOnPress(BuildContext context, ArticleEntity article) {
     AppRouter.goToArticleDetail(context, article);
   }
 }

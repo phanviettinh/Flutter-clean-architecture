@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:note_ring/config/theme/bloc/theme_bloc.dart';
 import 'package:note_ring/features/daily_news/data/data_source/local/app_database.dart';
 import 'package:note_ring/features/daily_news/data/data_source/remote/news_api_service.dart';
 import 'package:note_ring/features/daily_news/data/repository/article_repository.dart';
@@ -37,4 +38,5 @@ Future<void> initializeDependencies() async{
   //blocs
   sl.registerFactory<RemoteArticleBloc>(() => RemoteArticleBloc(sl()));
   sl.registerFactory<LocalArticleBloc>(() => LocalArticleBloc(sl(),sl(),sl()));
+  sl.registerFactory<ThemeBloc>(() => ThemeBloc());
 }
